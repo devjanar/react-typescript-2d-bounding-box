@@ -1,0 +1,7 @@
+enum ActionTypes {
+    CREATE_SUCCESS = 'CREATE_SUCCESS',
+    FIND_SUCCESS = 'FIND_SUCCESS',
+    FETCH_ALL_SUCCESS = 'FETCH_ALL_SUCCESS',
+    RECEIVE_ERROR = 'RECEIVE_ERROR'
+}
+export default ActionTypes;
