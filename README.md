@@ -5,10 +5,7 @@ The 2D bounding box annotation is available for driving cars, or any other visua
 <img src="./image/sample.png" width="700">
 
 #### Requirements
-#### `
-MongoDB
-Node 12.16.1 / Latest Version
-`
+#### `MongoDB, Node 12.16.1 / Latest Version`
 
 
 Below you will find some information about project structure
