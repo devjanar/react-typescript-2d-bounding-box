@@ -14,7 +14,7 @@ Below you will find some information about project structure
 Project should look like this:
 
 ```
-bounding-box-labelling/
+2d-bounding-box-labelling/
     backend/
         controllers/
             BoundingboxController.js
