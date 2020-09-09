@@ -20,6 +20,22 @@ var Boundingbox = new Schema({
             type: String,
             trim: true
         },
+        fillStyle : {
+            type: String,
+            trim: true
+        },
+        font : {
+            type: String,
+            trim: true
+        },
+        lineWidth : {
+            type: Number,
+            trim: true
+        },
+        strokeStyle : {
+            type: String,
+            trim: true
+        },
         height : {
             type: Number,
             trim: true

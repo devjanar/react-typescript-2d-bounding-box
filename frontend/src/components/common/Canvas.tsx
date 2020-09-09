@@ -17,6 +17,10 @@ const Canvas = (props:InterCanvasProps) => {
                     ctx.beginPath();
                     if (props.strokeRect && props.strokeRect.length) {
                         props.strokeRect.forEach((item2:any) => {
+                            ctx.lineWidth = item2.lineWidth;
+                            ctx.strokeStyle = item2.strokeStyle;
+                            ctx.fillStyle = item2.fillStyle;
+                            ctx.font = item2.font;
                             ctx.fillText(item2.fillText,  item2.last_mousex+fillTextX, item2.last_mousey+fillTextY);
                             ctx.strokeRect(item2.last_mousex, item2.last_mousey, item2.width, item2.height);
                         })

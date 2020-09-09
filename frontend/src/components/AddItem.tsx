@@ -32,22 +32,22 @@ interface PropsTypes {
     createItem:(data: any) => void,
 }
 
-
 const AddItem = (props:PropsTypes) => {
     let history = useHistory();
     const [state, setState] = useState<InterState>({
+        lineWidth:0,
+        strokeStyle:"",
         fillText:"",
+        fillStyle:"",
+        font:"15px Arial",
         last_mousex:0,
         last_mousey:0,
         isDrawWarining:false,
     });
-
     const canvasRefs = useRef<HTMLCanvasElement>(null);
     const imageRefs = useRef<HTMLImageElement>(null);
     const [context, setContext] = useState<any>(null);
-    const [strokeRect, setStrokeRect] = useState<InterStrokeRect[]>([
-        {last_mousex:0, last_mousey:0, width:0, height:0,fillText:'' }
-    ]);
+    const [strokeRect, setStrokeRect] = useState<InterStrokeRect[]>([]);
     const [photo, setPhoto] = useState<string>('');
     const [selectedFile, setSelectedFile] = useState<boolean>();
     const [canWidthHeight, setCanWidthHeight] = useState<InterCanWidthHeight>({
@@ -83,6 +83,10 @@ const AddItem = (props:PropsTypes) => {
             if (context && strokeRect && strokeRect.length) {
                 context.beginPath();
                 strokeRect.forEach((item:InterStrokeRect)=>{
+                    context.lineWidth = item.lineWidth;
+                    context.strokeStyle = item.strokeStyle;
+                    context.fillStyle = item.fillStyle;
+                    context.font = item.font;
                     context.fillText(item.fillText,  item.last_mousex+fillTextX, item.last_mousey+fillTextY);
                     context.strokeRect(item.last_mousex, item.last_mousey, item.width, item.height);
                 })
@@ -141,11 +145,16 @@ const AddItem = (props:PropsTypes) => {
         img.src=photo!;
         //
         if(mousedown) {
+            const {strokeStyle,fillStyle,font}=state;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
             ctx.beginPath();
             width = mousex - last_mousex;
             height = mousey - last_mousey;
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = strokeStyle? strokeStyle:'';
+            ctx.fillStyle = fillStyle? fillStyle:'';
+            ctx.font=font;
             ctx.strokeRect(last_mousex, last_mousey, width, height);
             state.last_mousex=last_mousex;
             state.last_mousey=last_mousey;
@@ -154,6 +163,9 @@ const AddItem = (props:PropsTypes) => {
             //Paint Rectangular With Text
             if(strokeRect && strokeRect.length){
                 strokeRect.forEach((item:InterStrokeRect)=>{
+                    ctx.lineWidth = item.lineWidth;
+                    ctx.strokeStyle = item.strokeStyle;
+                    ctx.fillStyle = item.fillStyle;
                     ctx.fillText(item.fillText,  item.last_mousex+fillTextX, item.last_mousey+fillTextY);
                     ctx.strokeRect(item.last_mousex, item.last_mousey, item.width, item.height);
                 })
@@ -163,8 +175,8 @@ const AddItem = (props:PropsTypes) => {
     //
     const addHandler = () => {
         if(width && height){
-            const {last_mousex,last_mousey}=state;
-            setStrokeRect([...strokeRect, {last_mousex, last_mousey, width, height,fillText:state.fillText }]);
+            const {lineWidth,strokeStyle,last_mousex,last_mousey,fillText,fillStyle,font}=state;
+            setStrokeRect([...strokeRect, {lineWidth,strokeStyle,last_mousex, last_mousey, width, height,fillText,fillStyle,font}]);
             toast.success('Success! Rectangular boxes added.', {
                 position: "bottom-right",
                 autoClose: 3000,
@@ -178,6 +190,10 @@ const AddItem = (props:PropsTypes) => {
         else {
             setState({...state,isDrawWarining:true});
         }
+        setTimeout(()=>{
+            console.log(strokeRect)
+        },100)
+
     };
     //
     const submitHandler = async () => {
@@ -222,21 +238,44 @@ const AddItem = (props:PropsTypes) => {
                                 <input id="file" type='file' className="inputfile" onChange={onSelectFile} />
                             </label>
                             <button className="btn btn-warning" style={{width: '100%'}} onClick={addHandler}>
-                                Add
+                                Add Bounding Box
                             </button>
                         </div>
-                        <div className="col-sm-3"> </div>
-                        <div className="col-sm-6">
-                            <div>
-                                <InputForm
-                                    label="Text"
-                                    name="fillText"
-                                    type="text"
-                                    placeholder="Enter"
-                                    onChange={onChangeHandle}
-                                    className="form-control"
-                                    value={state.fillText}
-                                />
+                        <div className="col-sm-9">
+                            <div className="row">
+                                <div className="col-4">
+                                    <InputForm
+                                        label="Bounding Color"
+                                        name="strokeStyle"
+                                        type="text"
+                                        placeholder="Enter Color Code"
+                                        onChange={onChangeHandle}
+                                        className="form-control"
+                                        value={state.strokeStyle}
+                                    />
+                                </div>
+                                <div className="col-4">
+                                    <InputForm
+                                        label="Text"
+                                        name="fillText"
+                                        type="text"
+                                        placeholder="Enter Text"
+                                        onChange={onChangeHandle}
+                                        className="form-control"
+                                        value={state.fillText}
+                                    />
+                                </div>
+                                <div className="col-4">
+                                    <InputForm
+                                        label="Text Color"
+                                        name="fillStyle"
+                                        type="text"
+                                        placeholder="Enter Color Code"
+                                        onChange={onChangeHandle}
+                                        className="form-control"
+                                        value={state.fillStyle}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -8,7 +8,7 @@ const boundingbox  = require( './routes/Boundingbox');
 const app = express();
 // db
 mongoose
-    .connect("mongodb://localhost:27017/box", {
+    .connect("mongodb://localhost:27017/twodboundingbox", {
         useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false, useUnifiedTopology: true  })
     .then(() => console.log('DB connected'))
     .catch(err => {
